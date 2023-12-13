@@ -45,6 +45,8 @@ export default class App extends React.Component {
       });
   };
 
+  // when displayCompelted === false, disable onclick for list items
+
   toggleComplete = (id) => () => {
     axios
       .patch(`${URL}/${id}`)
