@@ -3,7 +3,13 @@ import React from "react";
 export default class Form extends React.Component {
   render() {
     console.log("*** Form component *** fired.");
-    const { todoInput, todoInputChange, todoFormSubmit } = this.props;
+    const {
+      displayCompleted,
+      todoInput,
+      todoInputChange,
+      todoFormSubmit,
+      toggleDisplayCompleted,
+    } = this.props;
     return (
       <>
         <form onSubmit={todoFormSubmit}>
@@ -14,8 +20,10 @@ export default class Form extends React.Component {
             onChange={(e) => todoInputChange(e)}
           />
           <input type="submit" />
-          <button>Clear Completed</button>
         </form>
+        <button onClick={toggleDisplayCompleted}>
+          {displayCompleted ? "Hide" : "Show"} Completed
+        </button>
       </>
     );
   }

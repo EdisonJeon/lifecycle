@@ -4,12 +4,16 @@ import Todo from "./Todo";
 export default class TodoList extends React.Component {
   render() {
     console.log("*** TodoList component *** fired.");
-    const { todos } = this.props;
+    const { todos, toggleComplete, displayCompleted } = this.props;
     return (
       <>
-        {todos.map((todo) => {
-          return <Todo key={todo.id} todo={todo} />;
-        })}
+        {todos.reduce((acc, todo) => {
+          if (displayCompleted || !todo.completed)
+            return acc.concat(
+              <Todo key={todo.id} todo={todo} toggleComplete={toggleComplete} />
+            );
+          else return acc;
+        }, [])}
       </>
     );
   }

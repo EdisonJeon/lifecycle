@@ -11,6 +11,7 @@ export default class App extends React.Component {
     todos: [],
     error: "",
     todoInput: "",
+    displayCompleted: true,
   };
 
   // AXIOS CALL FUNCTIONS
@@ -32,11 +33,33 @@ export default class App extends React.Component {
       .post(URL, { name: this.state.todoInput })
       .then((res) => {
         console.log(res);
-        this.fetchAllTodos();
-        this.setState({ ...this.state, todoInput: "" });
+        this.setState({
+          ...this.state,
+          todos: this.state.todos.concat(res.data.data),
+        });
+        this.setState({ ...this.state, todoInput: "", error: "" });
       })
       .catch((err) => {
         console.error("POST request timed out with =>", err);
+        this.setState({ ...this.state, error: err.response.data.message });
+      });
+  };
+
+  toggleComplete = (id) => () => {
+    axios
+      .patch(`${URL}/${id}`)
+      .then((res) => {
+        console.log(res);
+        this.setState({
+          ...this.state,
+          todos: this.state.todos.map((todo) => {
+            if (todo.id !== id) return todo;
+            else return res.data.data;
+          }),
+        });
+      })
+      .catch((err) => {
+        console.error("PATCH request timed out with =>", err);
         this.setState({ ...this.state, error: err.response.data.message });
       });
   };
@@ -50,6 +73,13 @@ export default class App extends React.Component {
   todoFormSubmit = (e) => {
     e.preventDefault();
     this.postNewTodo();
+  };
+
+  toggleDisplayCompleted = () => {
+    this.setState({
+      ...this.state,
+      displayCompleted: !this.state.displayCompleted,
+    });
   };
 
   // REACT LIFECYCLE
@@ -69,11 +99,17 @@ export default class App extends React.Component {
     return (
       <>
         <Error error={this.state.error} />
-        <TodoList todos={this.state.todos} />
+        <TodoList
+          todos={this.state.todos}
+          toggleComplete={this.toggleComplete}
+          displayCompleted={this.state.displayCompleted}
+        />
         <Form
+          displayCompleted={this.state.displayCompleted}
           todoInput={this.state.todoInput}
           todoInputChange={this.todoInputChange}
           todoFormSubmit={this.todoFormSubmit}
+          toggleDisplayCompleted={this.toggleDisplayCompleted}
         />
       </>
     );
