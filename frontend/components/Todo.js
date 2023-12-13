@@ -1,7 +1,13 @@
-import React from 'react'
+import React from "react";
 
 export default class Todo extends React.Component {
   render() {
-    return null
+    console.log("*** Todo component *** fired.");
+    const { todo } = this.props;
+    return (
+      <>
+        <p>{todo.name}</p>
+      </>
+    );
   }
 }
