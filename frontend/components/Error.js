@@ -6,7 +6,7 @@ export default class Error extends React.Component {
     const { error } = this.props;
     return (
       <>
-        {error && <p>*** {error} ***</p>}
+        {error && <p id="error">*** {error} ***</p>}
       </>
     );
   }
